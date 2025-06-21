@@ -1,0 +1,8 @@
+[build]
+  publish = "dist" # carpeta donde Vite pone los archivos al hacer build
+  command = "npm run build"
+
+[[redirects]]
+  from = "/pages/*"
+  to = "/pages/:splat"
+  status = 200

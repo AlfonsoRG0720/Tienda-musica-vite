@@ -1,10 +1,20 @@
 import { eliminar, ObtenerValoresNuevos, editarDisco, listaDiscos } from "./../src/models/BBDD.models";
 
-test('Deberá regresar un array con un elemento menos al original: 59->58',()=>{
-    let listaPrueba=eliminar(listaDiscos,1);
+describe('Testear la eliminación',()=>{
 
-    expect (listaPrueba.length).toBe(58)
+    test('Deberá regresar un array con un elemento menos al original: 59->58',()=>{
+        let listaPrueba=eliminar(listaDiscos,1);
+        
+        expect (listaPrueba.length).toBe(58)
     });
+
+    test('Deberá regresar un array con un elemento menos al original: 59->58',()=>{
+        let listaPrueba=eliminar(listaDiscos,30);
+        
+        expect (listaPrueba.length).toBe(58)
+    });
+})
+
 
 
     
