@@ -5,6 +5,7 @@ import { almacenarBbddLS } from "./galeria-discos-controller.ts";
 
 export function mainLogin (){
 
+    alert("espera Login!")
     const formLogin=document.getElementById("FormLogin");
     
     if (!formLogin) {
@@ -39,6 +40,8 @@ export function mainLogin (){
         })
     }
 }
+
+
 
 /*
 store.dispatch(online());

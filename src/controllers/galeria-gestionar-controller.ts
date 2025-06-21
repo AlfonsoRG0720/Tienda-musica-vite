@@ -3,6 +3,8 @@ import { recuperarBbddLS } from "./galeria-discos-controller.ts";
 
 export function crearGaleriaLista(listaDiscos:IlistaDiscos) {
 
+  alert("espera Gestionar!")
+
   const el = document.querySelector("#Lista-Discos");
     if (!el){
       return;
@@ -145,6 +147,7 @@ function identificarAdmin() {
 
 export function mainGestionar() {
 
+  
     let ListaDiscosRecuperada=recuperarBbddLS("BBDD")|| listaDiscos;
     crearGaleriaLista(ListaDiscosRecuperada);
     EscuchaAgregarDisco();
