@@ -1,5 +1,5 @@
-import { recuperarBbddLS, almacenarBbddLS } from "../controllers/galeria-discos-controller.js";
-import { crearGaleriaLista } from "../controllers/galeria-gestionar-controller.js";
+import { recuperarBbddLS, almacenarBbddLS } from "../controllers/galeria-discos-controller.ts";
+import { crearGaleriaLista } from "../controllers/galeria-gestionar-controller.ts";
 
 
 export let listaDiscos= [

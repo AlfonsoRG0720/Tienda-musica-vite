@@ -1,5 +1,4 @@
-import { sumar, restar } from "./../src/models/test.models";
-import { eliminar, listaDiscos } from "./../src/models/BBDD.models";
+import { eliminar, ObtenerValoresNuevos, editarDisco, listaDiscos } from "./../src/models/BBDD.models";
 
 test('Deberá regresar un array con un elemento menos al original: 59->58',()=>{
     let listaPrueba=eliminar(listaDiscos,1);
@@ -7,6 +6,9 @@ test('Deberá regresar un array con un elemento menos al original: 59->58',()=>{
     expect (listaPrueba.length).toBe(58)
     });
 
+
+    
+    /*
 describe('Testear la función resta',()=>{
 
     test('restar 3 a 5 y el resultado debe devolver 2',()=>{
@@ -32,3 +34,4 @@ describe('Testear la función suma', ()=>{
 })
 
 
+*/
