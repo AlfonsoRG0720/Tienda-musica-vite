@@ -14,6 +14,7 @@ export function enrutador() {
     const currentPath = window.location.pathname;
     console.log(currentPath);
 
+    alert("espera!")
     if (currentPath in rutas) {
         rutas[currentPath as keyof typeof rutas]();
     } else {
