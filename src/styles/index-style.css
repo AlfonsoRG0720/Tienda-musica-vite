@@ -387,6 +387,13 @@ header{
     }
 }
 
+/*
+.sesionUsuario{
+    display: flex;
+    gap: 5rem;
+}
+*/
+
 footer{
     padding: 1em;
     width: 80%;

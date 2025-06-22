@@ -419,7 +419,7 @@ export let listaDiscos= [
 ]
 
 export let carrito=[
-    
+
 ]
 
 export interface ICarrito {
@@ -430,6 +430,7 @@ export interface ICarrito {
     precio?:number | any,
     cantidad?:number
 }
+
 export type ICarritoItem = ICarrito[];
 
 export let usuarios=[
@@ -492,8 +493,6 @@ export function eliminar(listaDiscos:Disco[], id:string) {
             return (temporal);
             
 }
-
-
 
 //=============Función agregar un disco nuevo a la BBDD===============
 export function ObtenerValoresNuevos() {
@@ -620,4 +619,67 @@ export function editarDisco(listaDiscos: Disco[], i: number) {
             alert("Artículo editado correctamente");
 }
 
-//===================Prueba testing con Jest==========================
+//===================Función leer usuarios============================
+
+export function leerUsuarios() {
+    let BBDDNew=recuperarBbddLS("BBDDusuario");
+    if (!BBDDNew) {
+        return usuarios;
+    } else {
+        return BBDDNew;
+    }
+}
+//===================Función crear usuarios nuevos====================
+
+export function agregarNuevoUsuario(userI:string, passwordI:string, nameI:string) {
+    const newUser={
+        user:userI,
+        password:passwordI,
+        name:nameI,
+        rol:"visitante",
+        compra:[]
+    };
+
+    let BBDDNew=recuperarBbddLS("BBDDusuario");
+    BBDDNew.push(newUser);
+    alert("Usuario creado");
+    almacenarBbddLS("BBDDusuario",BBDDNew);
+    almacenarBbddLS("usuarioActual",newUser.name);
+}
+
+//===================Función eliminar usuarios========================
+
+export function eliminarUsuario(eliminar:string) {
+    let BBDDNew=recuperarBbddLS("BBDDusuario");
+    let newListaUsuarios=[];
+
+    for (let i = 0; i < BBDDNew.length; i++) {
+        if (BBDDNew[i].user!=eliminar){
+            newListaUsuarios.push(BBDDNew[i]);
+        };
+    }
+
+    alert("Usuario ha sido eliminado");
+    almacenarBbddLS("BBDDusuario",newListaUsuarios);
+    almacenarBbddLS("usuarioActual",[]);
+    
+}
+
+//===================Función editar usuarios==========================
+export function editarUsuario(usuarioActual:string, userNew:string, passwordNew:string, nameNew:string) {
+    const usuariosBBDD=leerUsuarios();
+    
+    for (let i = 0; i < usuariosBBDD.length; i++) {
+        if (usuariosBBDD[i].name===usuarioActual) {
+            usuariosBBDD[i].user=userNew;
+            usuariosBBDD[i].password=passwordNew;
+            usuariosBBDD[i].name=nameNew;
+            break
+        }
+    }
+
+    almacenarBbddLS("BBDDusuario",usuariosBBDD);
+    almacenarBbddLS("usuarioActual",nameNew);
+    alert("Datos actualizados");
+
+}

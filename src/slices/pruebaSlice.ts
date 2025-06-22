@@ -20,7 +20,7 @@ export {chatReducer};
 
 
 
-const chatAdmin = createSlice({
+const chatAdmin = createSlice({ 
     name: 'chat',
     initialState: prueba,
     reducers: {

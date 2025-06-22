@@ -1,12 +1,12 @@
-import { usuarios } from "../models/BBDD.models.ts";
+import { leerUsuarios } from "../models/BBDD.models.ts";
 import { almacenarBbddLS } from "./galeria-discos-controller.ts";
 //import store from "./../store/store.ts";
 //import { online, offline } from "./../slices/pruebaSlice.ts";
 
 export function mainLogin (){
 
-    alert("espera Login!")
     const formLogin=document.getElementById("FormLogin");
+    const BBDDusuarios=leerUsuarios();
     
     if (!formLogin) {
         return
@@ -15,21 +15,21 @@ export function mainLogin (){
         formLogin.addEventListener("submit", (event) => {
             event.preventDefault();
             const nombre=document.getElementById("User") as HTMLInputElement;
-            nombre.value;
-            console.log(nombre);
+            const nombreInput=nombre.value;
+            console.log(nombreInput);
             const clave=document.getElementById("Password") as HTMLInputElement;
-            clave.value;
-            console.log(clave);
+            const claveInput=clave.value;
+            console.log(claveInput);
             const acceso=document.getElementById("Acceso") as HTMLInputElement;
         
         //chatOnline();
         
-        for (let i = 0; i < usuarios.length; i++) {
-            if ( usuarios[i].user === nombre.value && usuarios[i].password === clave.value) {
-                almacenarBbddLS("usuarioActual",usuarios[i].name)
-                if (usuarios[i].rol==="administrador") {
+        for (let i = 0; i < BBDDusuarios.length; i++) {
+            if ( BBDDusuarios[i].user === nombreInput && BBDDusuarios[i].password === claveInput) {
+                almacenarBbddLS("usuarioActual",BBDDusuarios[i].name)
+                if (BBDDusuarios[i].rol==="administrador") {
                     window.location.href="gestionar.html";
-                } else if(usuarios[i].rol==="visitante"){
+                } else if(BBDDusuarios[i].rol==="visitante"){
                     window.location.href="index.html";
                 } else {
                     acceso.innerHTML="Acceso negado";

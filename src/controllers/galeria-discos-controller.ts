@@ -1,4 +1,4 @@
-import { listaDiscos, carrito, usuarios, IlistaDiscos, ICarrito } from "../models/BBDD.models.ts";
+import { listaDiscos, carrito, usuarios, leerUsuarios, IlistaDiscos, ICarrito } from "../models/BBDD.models.ts";
 //import { chatOffline } from "./login-controller.ts";
 
 
@@ -16,7 +16,8 @@ export function iniciarPaginaHome() {
   const openBtn = document.getElementById('Open-carrito');
   const ventanaCarrito = document.getElementById('Carrito-compra');
   const overlay = document.getElementById('Overlay');
-  almacenarBbddLS("BBDDusuario", usuarios);
+  const usuariosLS = leerUsuarios();
+  almacenarBbddLS("BBDDusuario", usuariosLS);
   console.log(usuarios[0].compra);
   CarritoUsuario();
   
@@ -29,21 +30,31 @@ export function iniciarPaginaHome() {
     const nameUsuarioTag= document.getElementById("NameUsuario");
     const botonIniciarSesion=document.getElementById("BtnIniciar");
     const botonCerrarSesion=document.getElementById("BtnCerrar");
+    const botonGestionar=document.getElementById("Btn-Gestionar");
+    const botonDashboard=document.getElementById("Btn-Dashboard");
     
     if (nameUsuarioTag) {
       nameUsuarioTag.innerHTML=usuario;
     };
 
-    if (usuario && botonIniciarSesion && botonCerrarSesion) {
-      botonIniciarSesion.classList.add("hidden");
-      botonCerrarSesion.classList.remove("hidden");
-      botonCerrarSesion.addEventListener("click", function(){
-        CerrarSesion(usuario);
-      })
-    } else if (botonIniciarSesion && botonCerrarSesion){
-      botonIniciarSesion.classList.remove("hidden");
-      botonCerrarSesion.classList.add("hidden");
-    }
+    if (usuario && botonIniciarSesion && botonCerrarSesion && botonGestionar && botonDashboard) {
+      
+      if (usuario.length==0) {
+        botonCerrarSesion.classList.add("hidden");
+        botonIniciarSesion.classList.remove("hidden");
+        botonGestionar.classList.add("hidden");
+        botonDashboard.classList.add("hidden");
+        
+      } else {
+        botonIniciarSesion.classList.add("hidden");
+        botonCerrarSesion.classList.remove("hidden");
+        botonGestionar.classList.remove("hidden");
+        botonDashboard.classList.remove("hidden");
+        botonCerrarSesion.addEventListener("click", function(){
+          CerrarSesion(usuario);
+        })
+      }
+    } 
 
     function CerrarSesion(usuario:any) {
       console.log("se está ejecutando el cerrar")
@@ -478,7 +489,7 @@ export function crearGaleriaVertical(listaDiscos:IlistaDiscos) {
   }
 }
 
-//============================Recupera la BBDD del LocalStorage=========================
+//============================Recupera la BBDD del LocalStorage=========================Cambiar a Redux
 export function recuperarBbddLS(clave:string) {
   const item = localStorage.getItem(clave);
   let BBDDRecuperado = item ? JSON.parse(item) : null;
@@ -486,7 +497,7 @@ export function recuperarBbddLS(clave:string) {
   return BBDDRecuperado;
 }
 
-//=========================Guarda la BBDD modificada en el LocalStorage=================
+//=========================Guarda la BBDD modificada en el LocalStorage=================Cambiar a Redux
 export function almacenarBbddLS(clave:string, valor:any) {
   localStorage.setItem(clave, JSON.stringify(valor));
   console.log("Dato guardado en localStorage:", clave);

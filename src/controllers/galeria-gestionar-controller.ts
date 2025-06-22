@@ -3,8 +3,6 @@ import { recuperarBbddLS } from "./galeria-discos-controller.ts";
 
 export function crearGaleriaLista(listaDiscos:IlistaDiscos) {
 
-  alert("espera Gestionar!")
-
   const el = document.querySelector("#Lista-Discos");
     if (!el){
       return;
@@ -126,7 +124,20 @@ function EscuchaAgregarDisco() {
 }
 
 function identificarAdmin() {
-  const usuario=recuperarBbddLS("usuarioActual");
+  const usuarioActual=recuperarBbddLS("usuarioActual");
+  console.log(usuarioActual);
+  const usuariosBBDD=recuperarBbddLS("BBDDusuario");
+  const usuarioCompleto=usuariosBBDD.find((u:any) => u.name === usuarioActual);
+  console.log(usuarioCompleto);
+  let rol:string;
+
+  if (usuarioCompleto==undefined || usuarioCompleto==null) {
+    rol="";
+    
+  } else {
+    rol=usuarioCompleto.rol;
+  }
+  console.log(rol);
   const errorAcceso=document.getElementById("pag-gestionar");
   const nameUsuario=document.getElementById("NameUsuario");
 
@@ -134,11 +145,18 @@ function identificarAdmin() {
     return
   } else {
     
-    if(!usuario){
-      errorAcceso.innerHTML="No permitido acceder sin usuario de administrador";  
-      errorAcceso.style.fontSize="5rem";
+    if(rol!=="administrador"){
+      errorAcceso.style.width="70%";
+      errorAcceso.style.margin="50px auto";
+      errorAcceso.innerHTML="No permitido acceder sin usuario de administrador  -> ";  
+      errorAcceso.style.fontSize="3rem";
+      const enlace: HTMLAnchorElement = document.createElement('a');
+      enlace.href = '/index.html';
+      enlace.textContent = 'Ir al index';
+      enlace.rel = 'noopener noreferrer';
+      errorAcceso.appendChild(enlace);
     }else{
-      nameUsuario.innerHTML=usuario;
+      nameUsuario.innerHTML=usuarioActual;
     }
   }
 }
@@ -147,7 +165,7 @@ function identificarAdmin() {
 
 export function mainGestionar() {
 
-  
+
     let ListaDiscosRecuperada=recuperarBbddLS("BBDD")|| listaDiscos;
     crearGaleriaLista(ListaDiscosRecuperada);
     EscuchaAgregarDisco();
