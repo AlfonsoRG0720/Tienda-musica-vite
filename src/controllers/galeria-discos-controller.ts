@@ -10,23 +10,19 @@ export function iniciarPaginaHome() {
   let bbdd=recuperarBbddLS("BBDD") || listaDiscos;
   cuentaItems(bbdd);
   almacenarBbddLS("BBDD", bbdd);
-  let carroRecuperado=recuperarCarritoLS("carrito") || carrito;
-  carritoPago(carroRecuperado);
   funcionPaginacion(bbdd, estilo);
   const openBtn = document.getElementById('Open-carrito');
   const ventanaCarrito = document.getElementById('Carrito-compra');
   const overlay = document.getElementById('Overlay');
-  const usuariosLS = leerUsuarios();
-  almacenarBbddLS("BBDDusuario", usuariosLS);
-  console.log(usuarios[0].compra);
-  CarritoUsuario();
+  const usuario=recuperarBbddLS("usuarioActual") || null;
+  let carroRecuperado= (usuario && usuario.trim() !== "") ? carritoPerfilUsuario() : recuperarCarritoLS("carrito") || null;
+  carritoPago(carroRecuperado);
   
 
   
 
     //=============================GESTIÓN DE USUARIO=============================
 
-    const usuario=recuperarBbddLS("usuarioActual") || null;
     const nameUsuarioTag= document.getElementById("NameUsuario");
     const botonIniciarSesion=document.getElementById("BtnIniciar");
     const botonCerrarSesion=document.getElementById("BtnCerrar");
@@ -61,73 +57,13 @@ export function iniciarPaginaHome() {
       console.log(usuario)
       usuario=null;
       almacenarBbddLS("usuarioActual", usuario);
-      //chatOffline();
-      location.reload();
-    }
-
-    //===========================GESTION CARRITO DE USUARIO==========================
-
-    function CarritoUsuario() {
-      
-      const usuarioCarrito=recuperarBbddLS("usuarioActual") || null;
-      const BBDDusuariosLs=recuperarBbddLS("BBDDusuario");
-      
-      for (let i = 0; i < BBDDusuariosLs.length; i++) {
-        
-        if (!usuarioCarrito) {
-          
-          //va directo a carrito normal, no carga nada
-          
-        } else if (BBDDusuariosLs[i].name===usuarioCarrito) {
-          
-          let bbddDiscos=recuperarBbddLS("BBDD");
-
-          for (let y = 0; y < BBDDusuariosLs[i].compra.length; y++) {
-            let idDiscoCarritoUsuario=BBDDusuariosLs[i].compra[y].id;
-            let cantidadDiscoCarritoUsuario=BBDDusuariosLs[i].compra[y].cantidad;
-
-            for (let z = 0; z < bbddDiscos.length; z++) {
-              
-              if (bbddDiscos[z].id===idDiscoCarritoUsuario) {
-
-                let carritoUsuarioRecuperado=recuperarCarritoLS("carrito");
-                //console.log(carritoUsuarioRecuperado);
-                const discoUsuario={
-                  id:Number,
-                  nombre:String,
-                  anio:Number,
-                  imagen:String,
-                  precio:Number,
-                  cantidad:Number
-                };
-                
-                discoUsuario.id=bbddDiscos[z].id;
-                discoUsuario.nombre=bbddDiscos[z].nombre;
-                discoUsuario.anio=bbddDiscos[z].anio;
-                discoUsuario.imagen=bbddDiscos[z].imagen;
-                discoUsuario.precio=bbddDiscos[z].precio;
-                discoUsuario.cantidad=cantidadDiscoCarritoUsuario;
-                console.log(discoUsuario);
-
-                carritoUsuarioRecuperado.push(discoUsuario);
-                //console.log(carritoUsuarioRecuperado);
-                guardarCarritoLS(carritoUsuarioRecuperado);
-                carritoPago(carritoUsuarioRecuperado);
-
-
-              }
-              
-            }
-            
-          }
-          
-
-
-        };
-        
+      vaciarCarrito();
+      if (nameUsuarioTag) {
+        nameUsuarioTag.innerHTML=usuario? usuario: "";
       }
+      location.reload();
+      //chatOffline();
     }
-
 
 
     //============================CREACIÓN DE GALERIA=============================
@@ -279,6 +215,7 @@ export function vaciarCarrito() {
 export function pagarCarrito() {
   let total= totalPrecioCarrito( recuperarCarritoLS("carrito"));
   alert (`Carrito pagado: ${total}€`);
+  vaciarCarrito()
 }
 
 //=========================Indica la cantidad de items en la galería========================
@@ -634,6 +571,11 @@ function ordenMostrar(arraySeparado:any, estilo:boolean) {
 
 function carritoPago(carrito:any) {
 
+  if (!carrito) {
+    return
+  } else {
+    
+  
         let carritoTemporal = document.getElementById("Lista-carrito");
         let total=0;
 
@@ -747,7 +689,7 @@ function carritoPago(carrito:any) {
           totalCarrito.innerText="€"+total.toFixed(2);
         }
       }
-
+  }
 }
 
 
@@ -787,13 +729,15 @@ function totalPrecioCarrito(carrito:any) {
 //=============================GUARDAR Y RECUPERAR CARRITO DEL LOCAL STORAGE========================
 
 function guardarCarritoLS(carrito:any) {
+  carritoUsuario(carrito);
   localStorage.setItem("carrito", JSON.stringify(carrito));
 }
 
 function recuperarCarritoLS(key:string) {
   const carritoLocalStorage=localStorage.getItem(key);
   if (!carritoLocalStorage) {
-    return
+    let carritoVacio:any=[];
+    return carritoVacio
   } else {
     
     let carritoRecuperado=JSON.parse(carritoLocalStorage);
@@ -811,6 +755,100 @@ function eliminarDiscoCarrito(carritoAntesBorrar:any,id:number) {
   return nuevoCarrito;
 }
 
+
+//=====================FUNCION CARRITO DE USUARIO==========================================================
+
+function carritoUsuario(carrito:any) {
+  const usuarioActual=recuperarBbddLS("usuarioActual") || null;
+  const BBDDusuarios=leerUsuarios();
+
+  if (!usuarioActual) {
+    return
+  }
+
+  //-------------------prueba primero guardar----------------------------------
+
+  for (let i = 0; i < BBDDusuarios.length; i++) { 
+    if (BBDDusuarios[i].name === usuarioActual) {
+      
+      /*console.log("Esta es la línea de compra dentro del usuarios:")
+      console.log(BBDDusuarios[i].compra)
+      alert("Espera")
+      */
+
+      BBDDusuarios[i].compra=carrito.map((item: { id: number; cantidad: number }) => ({
+          id: item.id,
+          cantidad: item.cantidad
+        }))
+      
+
+      /*
+      console.log("Esta es la línea de compra después del ciclo map:")
+      console.log(BBDDusuarios[i].compra)
+      alert("Espera")
+      */
+    }
+  }
+
+  almacenarBbddLS("BBDDusuario",BBDDusuarios);
+}
+
+
+//-------------------Prueba extraer carrito de usuario----------------------------------
+
+      function carritoPerfilUsuario() {
+        const usuarioSesión=recuperarBbddLS("usuarioActual");
+        const bbdd=recuperarBbddLS("BBDD");
+        const usuarios=leerUsuarios();
+        let carritoUsuarioRecuperado: any[] = [];
+
+        interface IUsuario {
+          name: string;
+          compra: ICompraItem[] | { compra: ICompraItem[] };
+        }
+
+        interface ICompraItem {
+          id: number;
+          cantidad: number;
+        }
+
+        let compraUsuario: IUsuario | undefined = (usuarios.find((p: IUsuario) => p.name === usuarioSesión)).compra;
+        console.log(compraUsuario);
+
+        if (compraUsuario && Array.isArray(compraUsuario)) {
+          for (let i = 0; i < compraUsuario.length; i++) {
+            const id = compraUsuario[i].id;
+            const cantidad = compraUsuario[i].cantidad;
+            
+            const discoUsuario={
+                  id:Number,
+                  nombre:String,
+                  anio:Number,
+                  imagen:String,
+                  precio:Number,
+                  cantidad:Number
+                };
+                
+            for (let y = 0; y < bbdd.length; y++) {
+              if(bbdd[y].id===id){
+
+                discoUsuario.id=bbdd[y].id;
+                discoUsuario.nombre=bbdd[y].nombre;
+                discoUsuario.anio=bbdd[y].anio;
+                discoUsuario.imagen=bbdd[y].imagen;
+                discoUsuario.precio=bbdd[y].precio;
+                discoUsuario.cantidad=cantidad;
+  
+                carritoUsuarioRecuperado.push(discoUsuario);
+              }
+              
+            }
+          }
+        }
+
+        return carritoUsuarioRecuperado;
+
+      }
 
 //=====================FUNCIONES DE BOTONES DE REDUCIR Y AUMENTAR CANTIDAD EN CARRITO=======================
 
