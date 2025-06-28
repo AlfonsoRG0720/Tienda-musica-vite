@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NewUser-Tienda</title>
-    <link rel="stylesheet" href="./../styles/index-style.css">
-    <link rel="stylesheet" href="./../styles/login-style.css">
+    <title>Dashboard usuario</title>
+    <link rel="stylesheet" href="../src/styles/index-style.css">
+    <link rel="stylesheet" href="../src/styles/login-style.css">
     <script defer type="module" src="/src/controllers/index-controller.ts"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,29 +19,35 @@
     <header>
         <h1 class="hidden">TIENDA CD DE MÚSICA</h1>
         <figure class="banner">
-            <img src="./../../public/assets/banner2.png" alt="Banner rock store-cd">
+            <img src="/assets/banner2.png" alt="Banner rock store-cd">
             <!--<figcaption>Banner rock store-cd</figcaption>-->
         </figure>
     </header>
     <main>
         <section  class="item-list">
             <ul>
-                <li><a href="/index.html">Regresar a inicio</a></li>
-                <li><a href="/src/pages/login.html" class="admin">Iniciar sesión</a></li>
+                <li><a href="/index.html">Ir a la tienda</a></li>
             </ul>
         </section>
-        <div>
-            <form action="" id="FormNewUser" class="form-login">
-                <label for="User">Usuario</label>
-                <input id="User" type="text" placeholder="HarryP">
-                <label for="Password">Password</label>
-                <input id="Password" type="text" placeholder="1234">
-                <label for="Name">Nombre y apellido</label>
-                <input id="Name" type="text" placeholder="Harry Potter">
-                <button type="submit">Crear cuenta</button>
-                <button type="reset">Borrar</button>
-            </form>
-            <div id="AccesoNewUser"></div>
+        <div  id="pag-dashboard">
+            <h2 id="nombreUsuario"></h2>
+            <button id="BtnEditar">Editar información</button>
+            <button id="BtnEliminar">Eliminar cuenta</button>
+            <div>
+                <button>Ver carrito</button>
+            </div>
+            <div id="editarDatos" class="hidden">
+                <form action="" id="FormEditUser" class="form-edit">
+                    <label for="User">Usuario</label>
+                    <input id="User" type="text">
+                    <label for="Password">Password</label>
+                    <input id="Password" type="text">
+                    <label for="Name">Nombre y apellido</label>
+                    <input id="Name" type="text">
+                    <button type="submit">Actualizar</button>
+                    <button type="reset">Borrar</button>
+                </form>
+            </div>
         </div>
     </main>
     <footer>

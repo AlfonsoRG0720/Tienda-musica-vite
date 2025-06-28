@@ -1,11 +1,12 @@
-import { listaDiscos, carrito, usuarios, leerUsuarios, IlistaDiscos, ICarrito } from "../models/BBDD.models.ts";
-//import { chatOffline } from "./login-controller.ts";
+import { leerDiscos, leerCarrito, leerUsuarios, IlistaDiscos, ICarrito } from "../models/BBDD.models.ts";
+
 
 
 
 export function iniciarPaginaHome() {
-  
+
   let estilo=true;  //Estilo de vista si cuadrítucla o lista
+  let listaDiscos=leerDiscos();
 
   let bbdd=recuperarBbddLS("BBDD") || listaDiscos;
   cuentaItems(bbdd);
@@ -14,7 +15,7 @@ export function iniciarPaginaHome() {
   const openBtn = document.getElementById('Open-carrito');
   const ventanaCarrito = document.getElementById('Carrito-compra');
   const overlay = document.getElementById('Overlay');
-  const usuario=recuperarBbddLS("usuarioActual") || null;
+  const usuario=recuperarUsuarioActual();
   let carroRecuperado= (usuario && usuario.trim() !== "") ? carritoPerfilUsuario() : recuperarCarritoLS("carrito") || null;
   carritoPago(carroRecuperado);
   
@@ -30,12 +31,12 @@ export function iniciarPaginaHome() {
     const botonDashboard=document.getElementById("Btn-Dashboard");
     
     if (nameUsuarioTag) {
-      nameUsuarioTag.innerHTML=usuario;
+      nameUsuarioTag.innerHTML=usuario?usuario:"";
     };
 
     if (usuario && botonIniciarSesion && botonCerrarSesion && botonGestionar && botonDashboard) {
       
-      if (usuario.length==0) {
+      if (!usuario) {
         botonCerrarSesion.classList.add("hidden");
         botonIniciarSesion.classList.remove("hidden");
         botonGestionar.classList.add("hidden");
@@ -54,9 +55,12 @@ export function iniciarPaginaHome() {
 
     function CerrarSesion(usuario:any) {
       console.log("se está ejecutando el cerrar")
+      quitarCookieUsuario()
+      /*
       console.log(usuario)
       usuario=null;
-      almacenarBbddLS("usuarioActual", usuario);
+      guardarUsuarioActual(usuario);
+      */
       vaciarCarrito();
       if (nameUsuarioTag) {
         nameUsuarioTag.innerHTML=usuario? usuario: "";
@@ -207,6 +211,7 @@ function agregarEscuchas(disco: IlistaDiscos[number]) {
 
 //=================================Vacía el carrito======================================
 export function vaciarCarrito() {
+  let carrito=leerCarrito()
   carrito.length = 0;
   carritoPago(carrito);
   BtnTotalCarrito(null);
@@ -426,7 +431,7 @@ export function crearGaleriaVertical(listaDiscos:IlistaDiscos) {
   }
 }
 
-//============================Recupera la BBDD del LocalStorage=========================Cambiar a Redux
+//============================Recupera la BBDD del LocalStorage=========================
 export function recuperarBbddLS(clave:string) {
   const item = localStorage.getItem(clave);
   let BBDDRecuperado = item ? JSON.parse(item) : null;
@@ -434,7 +439,37 @@ export function recuperarBbddLS(clave:string) {
   return BBDDRecuperado;
 }
 
-//=========================Guarda la BBDD modificada en el LocalStorage=================Cambiar a Redux
+//============================Guarda Usuario actual en Cookies=========================
+export function guardarUsuarioActual(clave:string) {
+  console.log("estoy creando cookie")
+  let usuario=clave;
+  let hoy=new Date();
+  hoy.setTime(hoy.getTime()+(1000*60*60*24));
+  let expires="expires="+hoy.toUTCString();
+  document.cookie=`usuario=${usuario};${expires}; path=/`;
+}
+
+//============================Recupera Usuario actual de Cookies=========================
+export function recuperarUsuarioActual() {
+  let usuarioCookie = document.cookie;
+  let usuario = "";
+  let cookies = usuarioCookie.split(';');
+  for (let i = 0; i < cookies.length; i++) {
+    let [key, value] = cookies[i].trim().split('=');
+    if (key === "usuario") {
+      usuario = value;
+      break;
+    }
+  }
+  return usuario;
+}
+
+//============================Elimina Usuario actual de Cookies=========================
+export function quitarCookieUsuario() {
+  document.cookie = "usuario=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+
+//=========================Guarda la BBDD modificada en el LocalStorage=================
 export function almacenarBbddLS(clave:string, valor:any) {
   localStorage.setItem(clave, JSON.stringify(valor));
   console.log("Dato guardado en localStorage:", clave);
@@ -759,7 +794,7 @@ function eliminarDiscoCarrito(carritoAntesBorrar:any,id:number) {
 //=====================FUNCION CARRITO DE USUARIO==========================================================
 
 function carritoUsuario(carrito:any) {
-  const usuarioActual=recuperarBbddLS("usuarioActual") || null;
+  const usuarioActual=recuperarUsuarioActual() || null;
   const BBDDusuarios=leerUsuarios();
 
   if (!usuarioActual) {
@@ -797,10 +832,15 @@ function carritoUsuario(carrito:any) {
 //-------------------Prueba extraer carrito de usuario----------------------------------
 
       function carritoPerfilUsuario() {
-        const usuarioSesión=recuperarBbddLS("usuarioActual");
+        const usuarioSesión=recuperarUsuarioActual();
         const bbdd=recuperarBbddLS("BBDD");
         const usuarios=leerUsuarios();
         let carritoUsuarioRecuperado: any[] = [];
+        console.log(usuarioSesión)
+
+        if (usuarioSesión==null) {
+          return carritoUsuarioRecuperado
+        } else {
 
         interface IUsuario {
           name: string;
@@ -847,7 +887,7 @@ function carritoUsuario(carrito:any) {
         }
 
         return carritoUsuarioRecuperado;
-
+        }
       }
 
 //=====================FUNCIONES DE BOTONES DE REDUCIR Y AUMENTAR CANTIDAD EN CARRITO=======================

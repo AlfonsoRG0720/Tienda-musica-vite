@@ -1,5 +1,5 @@
 import { leerUsuarios } from "../models/BBDD.models.ts";
-import { almacenarBbddLS, recuperarBbddLS } from "./galeria-discos-controller.ts";
+import { guardarUsuarioActual, recuperarUsuarioActual } from "./galeria-discos-controller.ts";
 //import store from "./../store/store.ts";
 //import { online, offline } from "./../slices/pruebaSlice.ts";
 
@@ -7,7 +7,7 @@ export function mainLogin (){
 
     const formLogin=document.getElementById("FormLogin");
     const BBDDusuarios=leerUsuarios();
-    let usuarioActual=recuperarBbddLS("usuarioActual") || null;
+    let usuarioActual=recuperarUsuarioActual() || null;
     
     if (!formLogin) {
         return
@@ -23,11 +23,9 @@ export function mainLogin (){
             console.log(passwordInput);
             const acceso=document.getElementById("Acceso") as HTMLElement;
         
-        //chatOnline();
-        
         for (let i = 0; i < BBDDusuarios.length; i++) {
             if ( BBDDusuarios[i].user === userInput && BBDDusuarios[i].password === passwordInput) {
-                almacenarBbddLS("usuarioActual",BBDDusuarios[i].name)
+                guardarUsuarioActual(BBDDusuarios[i].name)//--------------------------------------------Cookie!!
                 usuarioActual=BBDDusuarios[i].name;
                 if (BBDDusuarios[i].rol==="administrador") {
                     window.location.href="gestionar.html";

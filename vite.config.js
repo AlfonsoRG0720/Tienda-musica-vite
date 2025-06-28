@@ -18,8 +18,8 @@ export default defineConfig({
       input: {
         // Entradas HTML para generar páginas distintas
         main: resolve(__dirname, 'index.html'),
-        login: resolve(__dirname, 'src/pages/login.html'),
-        Gestionar: resolve(__dirname, 'src/pages/gestionar.html'),
+        login: resolve(__dirname, 'pages/login.html'),
+        gestionar: resolve(__dirname, 'pages/gestionar.html'),
       },
     },
 

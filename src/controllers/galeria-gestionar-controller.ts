@@ -1,7 +1,9 @@
-import { listaDiscos, eliminar, ObtenerValoresNuevos, editarDisco, IlistaDiscos, Disco } from "../models/BBDD.models.ts";
-import { recuperarBbddLS } from "./galeria-discos-controller.ts";
+import { leerDiscos, eliminar, ObtenerValoresNuevos, editarDisco, IlistaDiscos, Disco } from "../models/BBDD.models.ts";
+import { recuperarBbddLS, recuperarUsuarioActual } from "./galeria-discos-controller.ts";
+
 
 export function crearGaleriaLista(listaDiscos:IlistaDiscos) {
+  
 
   const el = document.querySelector("#Lista-Discos");
     if (!el){
@@ -124,7 +126,12 @@ function EscuchaAgregarDisco() {
 }
 
 function identificarAdmin() {
-  const usuarioActual=recuperarBbddLS("usuarioActual");
+  const usuarioActual=recuperarUsuarioActual();
+  if (usuarioActual==null) {
+    return
+  } else {
+    
+  
   console.log(usuarioActual);
   const usuariosBBDD=recuperarBbddLS("BBDDusuario");
   const usuarioCompleto=usuariosBBDD.find((u:any) => u.name === usuarioActual);
@@ -160,13 +167,14 @@ function identificarAdmin() {
     }
   }
 }
+}
 
 
 
 export function mainGestionar() {
 
-
-    let ListaDiscosRecuperada=recuperarBbddLS("BBDD")|| listaDiscos;
+    let listaDiscosDuplicado=leerDiscos();
+    let ListaDiscosRecuperada=recuperarBbddLS("BBDD")|| listaDiscosDuplicado;
     crearGaleriaLista(ListaDiscosRecuperada);
     EscuchaAgregarDisco();
     ObtenerValoresNuevos();
