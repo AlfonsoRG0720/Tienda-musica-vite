@@ -217,10 +217,40 @@ export function vaciarCarrito() {
   BtnTotalCarrito(null);
 }
 
+//=================================Pagar el carrito======================================
 export function pagarCarrito() {
   let total= totalPrecioCarrito( recuperarCarritoLS("carrito"));
-  alert (`Carrito pagado: ${total}€`);
-  vaciarCarrito()
+  const usuarioSesion=recuperarUsuarioActual();
+  let confirmaciónPagoCarrito=document.getElementById("Carrito-compra") as HTMLElement;
+  let contenidoCarritoOriginal=confirmaciónPagoCarrito.innerHTML;
+  confirmaciónPagoCarrito.classList.add("pagado");
+    confirmaciónPagoCarrito.innerHTML=`
+    <h2 style="margin: 2rem">Pedido confirmado!🎉</h2>
+    <p style="margin: 2rem;font-size: 1.2rem">Gracias por tu pedido ${usuarioSesion}🫶, tu pedido se está procesando y te
+    lo enviaremos de inmediato🚀.</p>
+    <h3 style="margin: 2rem">Total pagado: ${total}€</h3>
+    <button id="btn-terminado" style="margin: 2rem; width: 8rem; font-size: 1.2rem; border-radius: 10px; background-color: var(--colorAmarillo);">Terminar compra</button>
+    `
+    const btnTerminarCompra=document.getElementById("btn-terminado");
+    if (btnTerminarCompra) { 
+      btnTerminarCompra.addEventListener("click",()=>{
+        confirmaciónPagoCarrito.innerHTML=contenidoCarritoOriginal;
+
+        const BtnVaciarCarrito=document.getElementById("BTN-vaciar-carrito");
+    if (!BtnVaciarCarrito) {
+      return
+    } else {
+      BtnVaciarCarrito.addEventListener("click", vaciarCarrito);
+    }
+    const BtnPagarCarrito=document.getElementById("BTN-pagar");
+    if (!BtnPagarCarrito) {
+      return
+    } else {
+      BtnPagarCarrito.addEventListener("click", pagarCarrito);
+    }
+      vaciarCarrito();
+      })
+    }
 }
 
 //=========================Indica la cantidad de items en la galería========================

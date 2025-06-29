@@ -1,9 +1,9 @@
-import { recuperarBbddLS } from "./../controllers/galeria-discos-controller";
+import { recuperarUsuarioActual } from "./../controllers/galeria-discos-controller";
 import { eliminarUsuario, leerUsuarios, editarUsuario } from "./../models/BBDD.models";
 
 function permisoAcceso() {
 
-    const usuarioActual=recuperarBbddLS("usuarioActual");
+    const usuarioActual=recuperarUsuarioActual();
     const usuariosActuales=leerUsuarios();
     const revisarUsuario = usuariosActuales.find((u:any) => u.name === usuarioActual);
     if (!revisarUsuario) {
@@ -19,7 +19,7 @@ function permisoAcceso() {
 }
 function identificarUsuario() {
     //Traer el usuario actual en sesión
-    const usuarioActual=recuperarBbddLS("usuarioActual");
+    const usuarioActual=recuperarUsuarioActual();
     let usuarioTag=document.getElementById("nombreUsuario");
     
     if (!usuarioTag) {
@@ -30,7 +30,7 @@ function identificarUsuario() {
 }
 
 function escuchaEliminar() {
-    const usuarioActual=recuperarBbddLS("usuarioActual");
+    const usuarioActual=recuperarUsuarioActual();
     
     const btnEliminar=document.getElementById("BtnEliminar");
     
@@ -56,7 +56,7 @@ function escuchaEditarUsuario() {
         return
     } else {
         btnEditar.addEventListener("click", ()=>{
-            const usuarioActual=recuperarBbddLS("usuarioActual");
+            const usuarioActual=recuperarUsuarioActual();
             const usuariosActuales=leerUsuarios();
             const revisarUsuario = usuariosActuales.find((u:any) => u.name === usuarioActual);
             let user=revisarUsuario.user;

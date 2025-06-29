@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard usuario</title>
     <link rel="stylesheet" href="../src/styles/index-style.css">
-    <link rel="stylesheet" href="../src/styles/login-style.css">
+    <link rel="stylesheet" href="../src/styles/dashboard-style.css">
     <script defer type="module" src="/src/controllers/index-controller.ts"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,12 +29,12 @@
                 <li><a href="/index.html">Ir a la tienda</a></li>
             </ul>
         </section>
-        <div  id="pag-dashboard">
-            <h2 id="nombreUsuario"></h2>
-            <button id="BtnEditar">Editar información</button>
-            <button id="BtnEliminar">Eliminar cuenta</button>
+        <div  id="pag-dashboard" class="clase-pagina-dashboard">
             <div>
-                <button>Ver carrito</button>
+                <h2 id="nombreUsuario"></h2>
+                <img src="/public/assets/perfiles/5.png" alt="imagen avatar usuario" class="avatar">
+                <button id="BtnEditar">Editar información</button>
+                <button id="BtnEliminar">Eliminar cuenta</button>
             </div>
             <div id="editarDatos" class="hidden">
                 <form action="" id="FormEditUser" class="form-edit">

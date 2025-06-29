@@ -1,4 +1,4 @@
-import { recuperarBbddLS, almacenarBbddLS } from "../controllers/galeria-discos-controller.ts";
+import { recuperarBbddLS, almacenarBbddLS, guardarUsuarioActual } from "../controllers/galeria-discos-controller.ts";
 import { crearGaleriaLista } from "../controllers/galeria-gestionar-controller.ts";
 import { usuarios } from "../mocks/usuarios.ts";
 import { listaDiscos } from "../mocks/productos.ts";
@@ -237,7 +237,7 @@ export function editarUsuario(usuarioActual:string, userNew:string, passwordNew:
     }
 
     almacenarBbddLS("BBDDusuario",usuariosBBDD);
-    almacenarBbddLS("usuarioActual",nameNew);
+    guardarUsuarioActual(nameNew);
     alert("Datos actualizados");
 
 }
