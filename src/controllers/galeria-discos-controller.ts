@@ -1,9 +1,9 @@
 import { leerDiscos, IlistaDiscos, ICarrito } from "../models/BBDD.models.ts";
 import { usuarios } from "../mocks/usuarios.ts";
 import store from "../store/store.ts";
-import { agregarAlCarrito, reducirCantidadRedux, aumentarCantidadRedux } from "../slices/carritoSlice.ts";
-import { recuperarBbddLS, almacenarBbddLS, guardarCarritoLS, recuperarCarritoLS, eliminarDiscoCarrito } from "../utilities/functions-LocalStorage.ts";
-import { vaciarCarrito, reducirCantidad, aumentarCantidad, carritoPerfilUsuario } from "../models/carrito.model.ts";//---------------------------> cuando estemos usando los slices hay que retirar estas funciones que llaman al modelo
+import { carritoPerfilUsuario } from "../models/carrito.model.ts";
+import { agregarAlCarrito, reducirCantidadRedux, aumentarCantidadRedux, eliminarDiscoRedux, vaciarCarritoRedux } from "../slices/carritoSlice.ts";
+import { recuperarBbddLS, almacenarBbddLS, guardarCarritoLS, recuperarCarritoLS } from "../utilities/functions-LocalStorage.ts";
 import { recuperarUsuarioActual, quitarCookieUsuario } from "../utilities/functions-cookies.ts";
 
 export function iniciarPaginaHome() {
@@ -71,7 +71,7 @@ export function iniciarPaginaHome() {
     function CerrarSesion(usuario:any) {
       console.log("se está ejecutando el cerrar")
       quitarCookieUsuario()
-      vaciarCarrito();
+      store.dispatch(vaciarCarritoRedux())
       if (nameUsuarioTag) {
         nameUsuarioTag.innerHTML=usuario? usuario: "";
       }
@@ -149,7 +149,14 @@ export function iniciarPaginaHome() {
       return
     } else {
       
-      BtnVaciarCarrito.addEventListener("click", vaciarCarrito);
+      BtnVaciarCarrito.addEventListener("click", ()=> {
+        console.log("paso 1 de vaciar carrito: ")
+        store.dispatch(vaciarCarritoRedux());
+        console.log("Esto es después del dispatch: ")
+        console.log(store.getState().carrito);
+        console.table(store.getState().carrito);
+        BtnTotalCarrito(null);
+      });
 
     }
     //=============================PAGAR CARRITO========================
@@ -203,30 +210,6 @@ function agregarEscuchas(disco: ICarrito) {
       //console.log("Esto es después del dispatch: ")
       //console.log(store.getState().carrito);
       //console.table(store.getState().carrito);
-      
-      /*
-
-      let carroRecuperado = recuperarCarritoLS("carrito");
-      const productoEnCarrito = carroRecuperado.find((productId: IlistaDiscos[number]) => id === productId.id);
-      alert("Agregado al carrito");
-
-      if (productoEnCarrito) {
-        for (let i = 0; i < carroRecuperado.length; i++) {
-          if (carroRecuperado[i].id === id) {
-            carroRecuperado[i].cantidad++;
-          }
-        }
-        guardarCarritoLS(carroRecuperado);
-        carritoPago(carroRecuperado);
-        return;
-      }
-      if (carroRecuperado != null) {
-        disco.cantidad = 1;
-        carroRecuperado.push(disco);
-        carritoPago(carroRecuperado);
-      }
-
-    */
     });
   }
 }
@@ -255,7 +238,9 @@ export function pagarCarrito() {
     if (!BtnVaciarCarrito) {
       return
     } else {
-      BtnVaciarCarrito.addEventListener("click", vaciarCarrito);
+      BtnVaciarCarrito.addEventListener("click", () => {
+        store.dispatch(vaciarCarritoRedux());
+      });
     }
     const BtnPagarCarrito=document.getElementById("BTN-pagar");
     if (!BtnPagarCarrito) {
@@ -263,7 +248,7 @@ export function pagarCarrito() {
     } else {
       BtnPagarCarrito.addEventListener("click", pagarCarrito);
     }
-      vaciarCarrito();
+      store.dispatch(vaciarCarritoRedux());
       })
     }
 }
@@ -671,11 +656,11 @@ export function carritoPago(carrito:any) {
                   preguntarSiEliminar(carrito[i].nombre,carrito,carrito[i].id)
                   
                 } else {
-                  console.log("paso 1 reducir")
+                  //console.log("paso 1 reducir")
                   store.dispatch(reducirCantidadRedux(carrito[i]));
-                  console.log("Esto es después del dispatch: ")
-                  console.log(store.getState().carrito);
-                  console.table(store.getState().carrito);
+                  //console.log("Esto es después del dispatch: ")
+                  //console.log(store.getState().carrito);
+                  //console.table(store.getState().carrito);
                   
                 }
                 
@@ -690,9 +675,11 @@ export function carritoPago(carrito:any) {
             } else {
               
               BtnDataIdMas.addEventListener("click", function () {
-                console.log("paso 1 aumentar");
+                //console.log("paso 1 aumentar");
                 store.dispatch(aumentarCantidadRedux(carrito[i]));
-                
+                //console.log("Esto es después del dispatch: ")
+                //console.log(store.getState().carrito);
+                //console.table(store.getState().carrito);
               })
               
               total=totalPrecioCarrito(carrito);
@@ -749,10 +736,12 @@ export function BtnTotalCarrito(cantCarritoUnidades:number | null) {
 function preguntarSiEliminar(nombreDisco:string,carrito:any,carritoId:number) {
 
   if (confirm(`Deseas eliminar del carrito el disco: ${nombreDisco}?`)) {
-    let carritoDespuesBorrar = eliminarDiscoCarrito(carrito,carritoId);
-    carritoPago(carritoDespuesBorrar);
+    //console.log("paso 1 eliminar")
+    store.dispatch(eliminarDiscoRedux(carritoId));
+    //console.log("Esto es después del dispatch: ")
+    //console.log(store.getState().carrito);
+    //console.table(store.getState().carrito);
   }
-
 }
 
 

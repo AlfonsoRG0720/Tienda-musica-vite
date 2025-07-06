@@ -1,7 +1,5 @@
 import { leerUsuarios } from "../models/BBDD.models.ts";
 import { guardarUsuarioActual, recuperarUsuarioActual } from "../utilities/functions-cookies.ts";
-//import store from "./../store/store.ts";
-//import { online, offline } from "./../slices/pruebaSlice.ts";
 
 export function mainLogin (){
 
@@ -25,7 +23,7 @@ export function mainLogin (){
         
         for (let i = 0; i < BBDDusuarios.length; i++) {
             if ( BBDDusuarios[i].user === userInput && BBDDusuarios[i].password === passwordInput) {
-                guardarUsuarioActual(BBDDusuarios[i].name)//--------------------------------------------Cookie!!
+                guardarUsuarioActual(BBDDusuarios[i].name)
                 usuarioActual=BBDDusuarios[i].name;
                 if (BBDDusuarios[i].rol==="administrador") {
                     window.location.href="gestionar.html";
@@ -41,30 +39,3 @@ export function mainLogin (){
         })
     }
 }
-
-
-
-/*
-store.dispatch(online());
-
-function chatOnline() {
-    store.getState().estado;
-    let flotante= document.getElementById("Flotante");
-    if (store.getState()) {
-        flotante.innerText="Online";
-    } else {
-        flotante.innerText="Offline";
-    } 
-}
-
-store.dispatch(offline());
-
-export function chatOffline() {
-    let flotante= document.getElementById("Flotante");
-    if (store.getState()) {
-        flotante.innerText="Online";
-    } else {
-        flotante.innerText="Offline";
-    } 
-}
-*/

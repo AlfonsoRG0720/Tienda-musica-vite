@@ -1,51 +1,6 @@
-import { recuperarBbddLS, almacenarBbddLS, guardarCarritoLS, recuperarCarritoLS } from "../utilities/functions-LocalStorage";
-import { carritoPago, BtnTotalCarrito } from "../controllers/galeria-discos-controller";
+import { recuperarBbddLS, almacenarBbddLS, recuperarCarritoLS } from "../utilities/functions-LocalStorage";
 import { recuperarUsuarioActual } from "../utilities/functions-cookies";
 import { leerUsuarios } from "../models/BBDD.models";
-import type { ItemCarrito } from "../slices/carritoSlice";
-
-
-//=================================Agregar al carrito======================================
-/*
-export function agregarAlCarrito(carrito:any) {
-   return 
-}
-
-//=================================Leer el carrito======================================
-export function leerCarrito() {
-  let carrito=recuperarBbddLS("carrito");
-  return carrito;
-}
-*/
-
-//=================================Actualizar el carrito======================================
-export function reducirCantidad(carrito:any) {
-  carrito.cantidad--;
-}
-
-export function aumentarCantidad(carrito:any) {
-  carrito.cantidad++;
-}
-
-//=================================Eliminar elemento del carrito======================================
-export function eliminarDiscoporID(id:number) {
-  let nuevaLista:ItemCarrito[]=[];
-  nuevaLista.filter(item => item.id !== id);
-  return nuevaLista
-}
-
-
-//=================================Borrar el carrito======================================
-export function vaciarCarrito() {
-    let carrito:any=[];
-    guardarCarritoLS(carrito);
-    carritoPago(carrito);
-    BtnTotalCarrito(null);
-}
-
-
-
-
 
 
 

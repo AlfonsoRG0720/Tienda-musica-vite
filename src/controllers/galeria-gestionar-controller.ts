@@ -102,7 +102,7 @@ export function crearGaleriaLista(listaDiscos:IlistaDiscos) {
             nombreEditarForm.value = DiscoParaEditar.nombre ?? "";
             anioEditarForm.value = DiscoParaEditar.anio !== undefined ? DiscoParaEditar.anio.toString() : "";
             imagenEditarForm.value=DiscoParaEditar.imagen ??"";
-            precioEditarForm.value=DiscoParaEditar.precio;
+            precioEditarForm.value=DiscoParaEditar.precio.toString();
           }
 
         }

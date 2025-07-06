@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { reducirCantidad, aumentarCantidad, eliminarDiscoporID, vaciarCarrito, carritoPerfilUsuario } from "../models/carrito.model";
-import { recuperarCarritoLS, guardarCarritoLS } from "../utilities/functions-LocalStorage";
+import { carritoPerfilUsuario } from "../models/carrito.model";
+import { guardarCarritoLS } from "../utilities/functions-LocalStorage";
 import { carritoPago } from "../controllers/galeria-discos-controller";
-import { carrito } from "../mocks/carrito";
+//import { carrito } from "../mocks/carrito";
 
 export type ItemCarrito = {
     id:number,
@@ -82,10 +82,10 @@ const carritoSlice = createSlice({
       return carroRecuperado
     },
     aumentarCantidadRedux: (_state, action: PayloadAction<ItemCarrito>) => {
-      console.log("paso 2 aumentar")
+      console.log("paso 2 aumentar");
       let carroRecuperado = carritoPerfilUsuario();
-      console.log(action.payload)
-      console.log(carroRecuperado)
+      console.log(action.payload);
+      console.log(carroRecuperado);
       for (let i = 0; i < carroRecuperado.length; i++) {
         if (carroRecuperado[i].id===action.payload.id) {
           carroRecuperado[i].cantidad +=1;
@@ -94,34 +94,23 @@ const carritoSlice = createSlice({
       guardarCarritoLS(carroRecuperado);
       carritoPago(carroRecuperado);
       return carroRecuperado
+    },
+    eliminarDiscoRedux: (_state, action: PayloadAction<number>) => {
+      console.log("paso 2 eliminar");
+      let carroRecuperado = carritoPerfilUsuario();
+      let carroDespuesEliminar = carroRecuperado.filter((item: ItemCarrito) => item.id !== action.payload);
+      guardarCarritoLS(carroDespuesEliminar);
+      carritoPago(carroDespuesEliminar);
+      return carroDespuesEliminar;
+    },
+    vaciarCarritoRedux: () => {
+      console.log("paso 2 vaciar carrito");
+      let carrito:any=[];
+      guardarCarritoLS(carrito);
+      carritoPago(carrito);
     }
   }
-  
+ });
 
-      /*
-      
-      
-            
-            
-            
-          eliminarDelCarrito: (state, action: PayloadAction<number>) => {
-            
-          return state.items.filter(item => item.id !== action.payload);
-          
-          //let nuevaLista: ItemCarrito[] = [];
-          //nuevaLista = eliminarDiscoporID(action.payload);
-          //return nuevaLista;
-        },
-        vaciarCarritoRedux: () => {
-          vaciarCarrito();
-        },
-        actualizarCantidad: (state, action: PayloadAction<{ id: number; nombre:string; imagen:string; precio:number; cantidad:number}>) => {
-          const item = state.find(item => item.id === action.payload.id);
-          if (item) item.cantidad = action.payload.cantidad;
-        },
-        */
-      }
-    );
-
-export const { agregarAlCarrito, reducirCantidadRedux, aumentarCantidadRedux } = carritoSlice.actions;
+export const { agregarAlCarrito, reducirCantidadRedux, aumentarCantidadRedux, eliminarDiscoRedux, vaciarCarritoRedux } = carritoSlice.actions;
 export default carritoSlice.reducer;
