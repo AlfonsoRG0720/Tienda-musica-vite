@@ -1,5 +1,5 @@
 import { leerUsuarios } from "../models/BBDD.models.ts";
-import { guardarUsuarioActual, recuperarUsuarioActual } from "./galeria-discos-controller.ts";
+import { guardarUsuarioActual, recuperarUsuarioActual } from "../utilities/functions-cookies.ts";
 //import store from "./../store/store.ts";
 //import { online, offline } from "./../slices/pruebaSlice.ts";
 

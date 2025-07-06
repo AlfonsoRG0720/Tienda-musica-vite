@@ -1,4 +1,4 @@
-import { recuperarUsuarioActual } from "./../controllers/galeria-discos-controller";
+import { recuperarUsuarioActual } from "../utilities/functions-cookies";
 import { eliminarUsuario, leerUsuarios, editarUsuario } from "./../models/BBDD.models";
 
 function permisoAcceso() {

@@ -1,6 +1,6 @@
 import { leerDiscos, eliminar, ObtenerValoresNuevos, editarDisco, IlistaDiscos, Disco } from "../models/BBDD.models.ts";
-import { recuperarBbddLS, recuperarUsuarioActual } from "./galeria-discos-controller.ts";
-
+import { recuperarUsuarioActual } from "../utilities/functions-cookies.ts";
+import { recuperarBbddLS } from "../utilities/functions-LocalStorage.ts";
 
 export function crearGaleriaLista(listaDiscos:IlistaDiscos) {
   

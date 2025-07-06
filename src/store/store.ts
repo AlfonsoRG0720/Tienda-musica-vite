@@ -1,18 +1,13 @@
-/*
 import { configureStore } from '@reduxjs/toolkit';
-import {chatReducer,chatReducerAdmin } from '../slices/pruebaSlice';
+import  carritoReducer  from '../slices/carritoSlice';
 
 
-  
+
 const store = configureStore({
     reducer: {
-        estado: chatReducer,
-        estado2: chatReducerAdmin
-    }
-});
-  
-
+        carrito:carritoReducer,
+        }
+    });
+        
+        
 export default store;
-
-
-*/

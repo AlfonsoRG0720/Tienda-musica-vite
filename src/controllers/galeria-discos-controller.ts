@@ -1,24 +1,39 @@
-import { leerDiscos, leerCarrito, leerUsuarios, IlistaDiscos, ICarrito } from "../models/BBDD.models.ts";
-
-
-
+import { leerDiscos, IlistaDiscos, ICarrito } from "../models/BBDD.models.ts";
+import { usuarios } from "../mocks/usuarios.ts";
+import store from "../store/store.ts";
+import { agregarAlCarrito } from "../slices/carritoSlice.ts";
+import { recuperarBbddLS, almacenarBbddLS, guardarCarritoLS, recuperarCarritoLS, eliminarDiscoCarrito } from "../utilities/functions-LocalStorage.ts";
+import { vaciarCarrito, reducirCantidad, aumentarCantidad, carritoPerfilUsuario } from "../models/carrito.model.ts";//---------------------------> cuando estemos usando los slices hay que retirar estas funciones que llaman al modelo
+import { recuperarUsuarioActual, quitarCookieUsuario } from "../utilities/functions-cookies.ts";
 
 export function iniciarPaginaHome() {
 
-  let estilo=true;  //Estilo de vista si cuadrítucla o lista
+  let estilo=true;  //Estilo de vista si cuadrícula o lista
   let listaDiscos=leerDiscos();
-
+  debugger;
+  const usuario=recuperarUsuarioActual();
   let bbdd=recuperarBbddLS("BBDD") || listaDiscos;
-  cuentaItems(bbdd);
   almacenarBbddLS("BBDD", bbdd);
+  cuentaItems(bbdd);
+  let BBDDusuariosRecuperada=recuperarBbddLS("BBDDusuario") || usuarios;
+  almacenarBbddLS("BBDDusuario",BBDDusuariosRecuperada);
   funcionPaginacion(bbdd, estilo);
   const openBtn = document.getElementById('Open-carrito');
   const ventanaCarrito = document.getElementById('Carrito-compra');
   const overlay = document.getElementById('Overlay');
-  const usuario=recuperarUsuarioActual();
-  let carroRecuperado= (usuario && usuario.trim() !== "") ? carritoPerfilUsuario() : recuperarCarritoLS("carrito") || null;
-  carritoPago(carroRecuperado);
-  
+  let carroRecuperado= (usuario && usuario.trim() !== "") ? carritoPerfilUsuario() : recuperarCarritoLS("carrito");
+  if (Array.isArray(carroRecuperado) && carroRecuperado.length === 0) {
+    carritoPago(carroRecuperado);
+  }
+
+
+  store.subscribe(() => {
+    console.log("paso suscribe")
+    const state = store.getState();
+    console.log('Estado actualizado del carrito:', state.carrito);
+    //guardarCarritoLS(state);
+  })
+
 
   
 
@@ -56,17 +71,11 @@ export function iniciarPaginaHome() {
     function CerrarSesion(usuario:any) {
       console.log("se está ejecutando el cerrar")
       quitarCookieUsuario()
-      /*
-      console.log(usuario)
-      usuario=null;
-      guardarUsuarioActual(usuario);
-      */
       vaciarCarrito();
       if (nameUsuarioTag) {
         nameUsuarioTag.innerHTML=usuario? usuario: "";
       }
       location.reload();
-      //chatOffline();
     }
 
 
@@ -132,7 +141,7 @@ export function iniciarPaginaHome() {
     });
 
 
-    //=============================GUARDAR Y RECUPERAR CARRITO========================
+    //=============================ESCUCHA DE VACIAR CARRITO========================
 
     const BtnVaciarCarrito=document.getElementById("BTN-vaciar-carrito");
     
@@ -177,7 +186,7 @@ export function iniciarPaginaHome() {
 
 }
 
-function agregarEscuchas(disco: IlistaDiscos[number]) {
+function agregarEscuchas(disco: ICarrito) {
   const id = disco.id;
   const idTexto = id.toString();
   const BtnAgregarAlCarrito = document.getElementById(idTexto);
@@ -186,6 +195,17 @@ function agregarEscuchas(disco: IlistaDiscos[number]) {
     return;
   } else {
     BtnAgregarAlCarrito.addEventListener("click", function () {
+      debugger;
+      console.log("paso 1- este es el disco: ")
+      console.log(disco)
+      console.log(store.getState().carrito)
+      store.dispatch(agregarAlCarrito(disco));
+      console.log("Esto es después del dispatch: ")
+      console.log(store.getState().carrito);
+      console.table(store.getState().carrito);
+      
+      /*
+
       let carroRecuperado = recuperarCarritoLS("carrito");
       const productoEnCarrito = carroRecuperado.find((productId: IlistaDiscos[number]) => id === productId.id);
       alert("Agregado al carrito");
@@ -205,17 +225,12 @@ function agregarEscuchas(disco: IlistaDiscos[number]) {
         carroRecuperado.push(disco);
         carritoPago(carroRecuperado);
       }
+
+    */
     });
   }
 }
 
-//=================================Vacía el carrito======================================
-export function vaciarCarrito() {
-  let carrito=leerCarrito()
-  carrito.length = 0;
-  carritoPago(carrito);
-  BtnTotalCarrito(null);
-}
 
 //=================================Pagar el carrito======================================
 export function pagarCarrito() {
@@ -461,49 +476,7 @@ export function crearGaleriaVertical(listaDiscos:IlistaDiscos) {
   }
 }
 
-//============================Recupera la BBDD del LocalStorage=========================
-export function recuperarBbddLS(clave:string) {
-  const item = localStorage.getItem(clave);
-  let BBDDRecuperado = item ? JSON.parse(item) : null;
-  console.log(BBDDRecuperado);
-  return BBDDRecuperado;
-}
 
-//============================Guarda Usuario actual en Cookies=========================
-export function guardarUsuarioActual(clave:string) {
-  console.log("estoy creando cookie")
-  let usuario=clave;
-  let hoy=new Date();
-  hoy.setTime(hoy.getTime()+(1000*60*60*24));
-  let expires="expires="+hoy.toUTCString();
-  document.cookie=`usuario=${usuario};${expires}; path=/`;
-}
-
-//============================Recupera Usuario actual de Cookies=========================
-export function recuperarUsuarioActual() {
-  let usuarioCookie = document.cookie;
-  let usuario = "";
-  let cookies = usuarioCookie.split(';');
-  for (let i = 0; i < cookies.length; i++) {
-    let [key, value] = cookies[i].trim().split('=');
-    if (key === "usuario") {
-      usuario = value;
-      break;
-    }
-  }
-  return usuario;
-}
-
-//============================Elimina Usuario actual de Cookies=========================
-export function quitarCookieUsuario() {
-  document.cookie = "usuario=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-}
-
-//=========================Guarda la BBDD modificada en el LocalStorage=================
-export function almacenarBbddLS(clave:string, valor:any) {
-  localStorage.setItem(clave, JSON.stringify(valor));
-  console.log("Dato guardado en localStorage:", clave);
-}
 
 //=============================Función de paginación==================================
 export function funcionPaginacion(bbdd: any[], estilo:boolean) {
@@ -634,7 +607,7 @@ function ordenMostrar(arraySeparado:any, estilo:boolean) {
 
 //=======================CREACIÓN DE LISTA DE CARRITO DE COMPRAS======================
 
-function carritoPago(carrito:any) {
+export function carritoPago(carrito:any) {
 
   if (!carrito) {
     return
@@ -738,6 +711,7 @@ function carritoPago(carrito:any) {
             carritoTemporal.innerHTML="<h2 class=vacio>El carrito está vacío</h2>";
         } else {
           totalArticulosCarrito.style.display="flex";
+          console.log(carrito);
             carrito.forEach((element:ICarrito) => {
             cantCarritoUnidades = cantCarritoUnidades + (element.cantidad ?? 0);   //=======================OJO, REVISAR SI HAY PROBLEMAS CON EL CARRITO==========
             BtnTotalCarrito(cantCarritoUnidades);
@@ -758,7 +732,7 @@ function carritoPago(carrito:any) {
 }
 
 
-function BtnTotalCarrito(cantCarritoUnidades:number | null) {
+export function BtnTotalCarrito(cantCarritoUnidades:number | null) {
   const BtncantCarrito=document.getElementById("Cant-carrito-btn");
 
   if (!BtncantCarrito) {
@@ -790,142 +764,3 @@ function totalPrecioCarrito(carrito:any) {
 }
 
 
-
-//=============================GUARDAR Y RECUPERAR CARRITO DEL LOCAL STORAGE========================
-
-function guardarCarritoLS(carrito:any) {
-  carritoUsuario(carrito);
-  localStorage.setItem("carrito", JSON.stringify(carrito));
-}
-
-function recuperarCarritoLS(key:string) {
-  const carritoLocalStorage=localStorage.getItem(key);
-  if (!carritoLocalStorage) {
-    let carritoVacio:any=[];
-    return carritoVacio
-  } else {
-    
-    let carritoRecuperado=JSON.parse(carritoLocalStorage);
-    return carritoRecuperado;
-  }
-}
-
-function eliminarDiscoCarrito(carritoAntesBorrar:any,id:number) {
-  let nuevoCarrito=[];
-  for (let i = 0; i < carritoAntesBorrar.length; i++) {
-    if (carritoAntesBorrar[i].id != id) {
-      nuevoCarrito.push(carritoAntesBorrar[i]);
-    }
-  }
-  return nuevoCarrito;
-}
-
-
-//=====================FUNCION CARRITO DE USUARIO==========================================================
-
-function carritoUsuario(carrito:any) {
-  const usuarioActual=recuperarUsuarioActual() || null;
-  const BBDDusuarios=leerUsuarios();
-
-  if (!usuarioActual) {
-    return
-  }
-
-  //-------------------prueba primero guardar----------------------------------
-
-  for (let i = 0; i < BBDDusuarios.length; i++) { 
-    if (BBDDusuarios[i].name === usuarioActual) {
-      
-      /*console.log("Esta es la línea de compra dentro del usuarios:")
-      console.log(BBDDusuarios[i].compra)
-      alert("Espera")
-      */
-
-      BBDDusuarios[i].compra=carrito.map((item: { id: number; cantidad: number }) => ({
-          id: item.id,
-          cantidad: item.cantidad
-        }))
-      
-
-      /*
-      console.log("Esta es la línea de compra después del ciclo map:")
-      console.log(BBDDusuarios[i].compra)
-      alert("Espera")
-      */
-    }
-  }
-
-  almacenarBbddLS("BBDDusuario",BBDDusuarios);
-}
-
-
-//-------------------Prueba extraer carrito de usuario----------------------------------
-
-      function carritoPerfilUsuario() {
-        const usuarioSesión=recuperarUsuarioActual();
-        const bbdd=recuperarBbddLS("BBDD");
-        const usuarios=leerUsuarios();
-        let carritoUsuarioRecuperado: any[] = [];
-        console.log(usuarioSesión)
-
-        if (usuarioSesión==null) {
-          return carritoUsuarioRecuperado
-        } else {
-
-        interface IUsuario {
-          name: string;
-          compra: ICompraItem[] | { compra: ICompraItem[] };
-        }
-
-        interface ICompraItem {
-          id: number;
-          cantidad: number;
-        }
-
-        let compraUsuario: IUsuario | undefined = (usuarios.find((p: IUsuario) => p.name === usuarioSesión)).compra;
-        console.log(compraUsuario);
-
-        if (compraUsuario && Array.isArray(compraUsuario)) {
-          for (let i = 0; i < compraUsuario.length; i++) {
-            const id = compraUsuario[i].id;
-            const cantidad = compraUsuario[i].cantidad;
-            
-            const discoUsuario={
-                  id:Number,
-                  nombre:String,
-                  anio:Number,
-                  imagen:String,
-                  precio:Number,
-                  cantidad:Number
-                };
-                
-            for (let y = 0; y < bbdd.length; y++) {
-              if(bbdd[y].id===id){
-
-                discoUsuario.id=bbdd[y].id;
-                discoUsuario.nombre=bbdd[y].nombre;
-                discoUsuario.anio=bbdd[y].anio;
-                discoUsuario.imagen=bbdd[y].imagen;
-                discoUsuario.precio=bbdd[y].precio;
-                discoUsuario.cantidad=cantidad;
-  
-                carritoUsuarioRecuperado.push(discoUsuario);
-              }
-              
-            }
-          }
-        }
-
-        return carritoUsuarioRecuperado;
-        }
-      }
-
-//=====================FUNCIONES DE BOTONES DE REDUCIR Y AUMENTAR CANTIDAD EN CARRITO=======================
-
-function reducirCantidad(carrito:any) {
-  carrito.cantidad--;
-}
-
-function aumentarCantidad(carrito:any) {
-  carrito.cantidad++;
-}

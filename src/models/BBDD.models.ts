@@ -1,29 +1,29 @@
-import { recuperarBbddLS, almacenarBbddLS, guardarUsuarioActual } from "../controllers/galeria-discos-controller.ts";
+import { guardarUsuarioActual } from "../utilities/functions-cookies.ts";
 import { crearGaleriaLista } from "../controllers/galeria-gestionar-controller.ts";
 import { usuarios } from "../mocks/usuarios.ts";
 import { listaDiscos } from "../mocks/productos.ts";
 import { carrito } from "../mocks/carrito.ts";
+import { recuperarBbddLS, almacenarBbddLS } from "../utilities/functions-LocalStorage.ts";
 
 
 
 export interface ICarrito {
     id:number,
-    nombre?:string,
-    anio?:number,
-    imagen?:string,
-    precio?:number | any,
-    cantidad?:number
+    nombre:string,
+    imagen:string,
+    precio:number,
+    cantidad:number
 }
 
 export type ICarritoItem = ICarrito[];
 
 export interface Disco {
     id:number,
-    nombre?:string,
-    anio?:number,
-    imagen?:string,
-    precio?:number | any,
-    cantidad?:number
+    nombre:string,
+    anio:number,
+    imagen:string,
+    precio:number,
+    cantidad:number
 }
 export type IlistaDiscos = Disco[];
 
@@ -178,7 +178,6 @@ export function editarDisco(listaDiscos: Disco[], i: number) {
 }
 
 //===================Función leer usuarios============================
-
 export function leerUsuarios() {
     let BBDDNew=recuperarBbddLS("BBDDusuario");
     if (!BBDDNew) {
@@ -206,7 +205,6 @@ export function agregarNuevoUsuario(userI:string, passwordI:string, nameI:string
 }
 
 //===================Función eliminar usuarios========================
-
 export function eliminarUsuario(eliminar:string) {
     let BBDDNew=recuperarBbddLS("BBDDusuario");
     let newListaUsuarios=[];
@@ -246,3 +244,4 @@ export function editarUsuario(usuarioActual:string, userNew:string, passwordNew:
 export function leerCarrito() {
   return carrito
 }
+

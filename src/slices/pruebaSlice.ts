@@ -1,4 +1,4 @@
-/*
+
 import { createSlice } from '@reduxjs/toolkit';
 
 const prueba=false;
@@ -35,4 +35,3 @@ export const { online1, offline1 } = chatAdmin.actions;
 const chatReducerAdmin=chatAdmin.reducer;
 export {chatReducerAdmin};
 
-*/
