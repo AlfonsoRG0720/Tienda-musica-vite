@@ -67,7 +67,36 @@ const carritoSlice = createSlice({
         }
       }
     },
+    reducirCantidadRedux:(_state, action: PayloadAction<ItemCarrito>) => {
+      console.log("paso 2 reducir")
+      let carroRecuperado = carritoPerfilUsuario();
+      console.log(action.payload)
+      console.log(carroRecuperado)
+      for (let i = 0; i < carroRecuperado.length; i++) {
+        if (carroRecuperado[i].id===action.payload.id) {
+          carroRecuperado[i].cantidad -=1;
+        };
+      }
+      guardarCarritoLS(carroRecuperado);
+      carritoPago(carroRecuperado);
+      return carroRecuperado
+    },
+    aumentarCantidadRedux: (_state, action: PayloadAction<ItemCarrito>) => {
+      console.log("paso 2 aumentar")
+      let carroRecuperado = carritoPerfilUsuario();
+      console.log(action.payload)
+      console.log(carroRecuperado)
+      for (let i = 0; i < carroRecuperado.length; i++) {
+        if (carroRecuperado[i].id===action.payload.id) {
+          carroRecuperado[i].cantidad +=1;
+        };
+      }
+      guardarCarritoLS(carroRecuperado);
+      carritoPago(carroRecuperado);
+      return carroRecuperado
+    }
   }
+  
 
       /*
       
@@ -90,23 +119,9 @@ const carritoSlice = createSlice({
           const item = state.find(item => item.id === action.payload.id);
           if (item) item.cantidad = action.payload.cantidad;
         },
-        aumentarCantidadDisco: (state, action) => {
-          const item = state.find(i => i.id === action.payload);
-          if (item) item.cantidad += 1;
-          
-          //aumentarCantidad(action);<----------------funcion en el modelo
-          
-        },
-        
-        reducirCantidadDisco: (state, action) => {
-          const item = state.find(i => i.id === action.payload);
-          if (item && item.cantidad > 1) item.cantidad -= 1;
-          
-          //reducirCantidad(action);<----------------funcion en el modelo
-        }
         */
       }
     );
 
-export const { agregarAlCarrito } = carritoSlice.actions;
+export const { agregarAlCarrito, reducirCantidadRedux, aumentarCantidadRedux } = carritoSlice.actions;
 export default carritoSlice.reducer;

@@ -1,7 +1,7 @@
 import { leerDiscos, IlistaDiscos, ICarrito } from "../models/BBDD.models.ts";
 import { usuarios } from "../mocks/usuarios.ts";
 import store from "../store/store.ts";
-import { agregarAlCarrito } from "../slices/carritoSlice.ts";
+import { agregarAlCarrito, reducirCantidadRedux, aumentarCantidadRedux } from "../slices/carritoSlice.ts";
 import { recuperarBbddLS, almacenarBbddLS, guardarCarritoLS, recuperarCarritoLS, eliminarDiscoCarrito } from "../utilities/functions-LocalStorage.ts";
 import { vaciarCarrito, reducirCantidad, aumentarCantidad, carritoPerfilUsuario } from "../models/carrito.model.ts";//---------------------------> cuando estemos usando los slices hay que retirar estas funciones que llaman al modelo
 import { recuperarUsuarioActual, quitarCookieUsuario } from "../utilities/functions-cookies.ts";
@@ -196,13 +196,13 @@ function agregarEscuchas(disco: ICarrito) {
   } else {
     BtnAgregarAlCarrito.addEventListener("click", function () {
       //debugger;
-      console.log("paso 1- este es el disco: ")
-      console.log(disco)
-      console.log(store.getState().carrito)
+      //console.log("paso 1- este es el disco: ")
+      //console.log(disco)
+      //console.log(store.getState().carrito)
       store.dispatch(agregarAlCarrito(disco));
-      console.log("Esto es después del dispatch: ")
-      console.log(store.getState().carrito);
-      console.table(store.getState().carrito);
+      //console.log("Esto es después del dispatch: ")
+      //console.log(store.getState().carrito);
+      //console.table(store.getState().carrito);
       
       /*
 
@@ -671,8 +671,12 @@ export function carritoPago(carrito:any) {
                   preguntarSiEliminar(carrito[i].nombre,carrito,carrito[i].id)
                   
                 } else {
-                  reducirCantidad(carrito[i]);
-                  carritoPago(carrito);
+                  console.log("paso 1 reducir")
+                  store.dispatch(reducirCantidadRedux(carrito[i]));
+                  console.log("Esto es después del dispatch: ")
+                  console.log(store.getState().carrito);
+                  console.table(store.getState().carrito);
+                  
                 }
                 
               })
@@ -686,9 +690,8 @@ export function carritoPago(carrito:any) {
             } else {
               
               BtnDataIdMas.addEventListener("click", function () {
-                
-                aumentarCantidad(carrito[i]);
-                carritoPago(carrito);
+                console.log("paso 1 aumentar");
+                store.dispatch(aumentarCantidadRedux(carrito[i]));
                 
               })
               
