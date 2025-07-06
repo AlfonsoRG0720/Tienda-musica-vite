@@ -10,7 +10,7 @@ export function iniciarPaginaHome() {
 
   let estilo=true;  //Estilo de vista si cuadrícula o lista
   let listaDiscos=leerDiscos();
-  debugger;
+  //debugger;
   const usuario=recuperarUsuarioActual();
   let bbdd=recuperarBbddLS("BBDD") || listaDiscos;
   almacenarBbddLS("BBDD", bbdd);
@@ -22,7 +22,7 @@ export function iniciarPaginaHome() {
   const ventanaCarrito = document.getElementById('Carrito-compra');
   const overlay = document.getElementById('Overlay');
   let carroRecuperado= (usuario && usuario.trim() !== "") ? carritoPerfilUsuario() : recuperarCarritoLS("carrito");
-  if (Array.isArray(carroRecuperado) && carroRecuperado.length === 0) {
+  if (Array.isArray(carroRecuperado) && carroRecuperado.length !== 0) {
     carritoPago(carroRecuperado);
   }
 
@@ -195,7 +195,7 @@ function agregarEscuchas(disco: ICarrito) {
     return;
   } else {
     BtnAgregarAlCarrito.addEventListener("click", function () {
-      debugger;
+      //debugger;
       console.log("paso 1- este es el disco: ")
       console.log(disco)
       console.log(store.getState().carrito)

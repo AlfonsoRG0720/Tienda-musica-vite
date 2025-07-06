@@ -40,6 +40,7 @@ const carritoSlice = createSlice({
       } else {
 
         const productoEnCarrito: ItemCarrito | null = (carroRecuperado as ItemCarrito[]).find((productId: ItemCarrito) => productId.id === action.payload.id) || null;
+        console.log(productoEnCarrito)
         if (!productoEnCarrito) {
           console.log("Esto es dentro de op carro sin el mismo disco:")
           action.payload.cantidad = 1;
@@ -59,7 +60,7 @@ const carritoSlice = createSlice({
             }
           }
           
-          guardarCarritoLS([carroRecuperado]);
+          guardarCarritoLS(carroRecuperado);
           carritoPago(carroRecuperado);
           alert("Agregado al carrito");
           return carroRecuperado;

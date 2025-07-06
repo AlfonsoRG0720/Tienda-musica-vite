@@ -102,6 +102,7 @@ export function carritoPerfilUsuario() {
 
         let compraUsuario: IUsuario | undefined = (usuarios.find((p: IUsuario) => p.name === usuarioSesión)).compra;
         console.log(compraUsuario);
+        carritoUsuarioRecuperado=[];
 
         if (compraUsuario && Array.isArray(compraUsuario)) {
           for (let i = 0; i < compraUsuario.length; i++) {
