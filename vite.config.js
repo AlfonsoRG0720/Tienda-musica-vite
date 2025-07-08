@@ -8,6 +8,8 @@ export default defineConfig({
   // Carpeta de archivos estáticos (opcional)
   publicDir: 'public', 
 
+  base: './',
+
   // Configuración de build (compilación)
   build: {
     // Carpeta donde se generan los archivos al hacer `npm run build`
@@ -20,6 +22,8 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         login: resolve(__dirname, 'pages/login.html'),
         gestionar: resolve(__dirname, 'pages/gestionar.html'),
+        dashboard: resolve(__dirname, 'pages/dashboard.html'),
+        newUser: resolve(__dirname, 'pages/newUser.html')
       },
     },
 

@@ -14,7 +14,8 @@ export type ItemCarrito = {
 
 type CarritoState = ItemCarrito[];
 
-//const estadoInicialCarrito=carrito;
+//let carritoStateInicial = carritoPerfilUsuario();
+//const estadoInicialCarrito=carritoStateInicial;
 
 const initialState: CarritoState = [];
 
@@ -67,7 +68,9 @@ const carritoSlice = createSlice({
         }
       }
     },
-    reducirCantidadRedux:(_state, action: PayloadAction<ItemCarrito>) => {
+    reducirCantidadRedux:(state, action: PayloadAction<ItemCarrito>) => {
+      console.log("estado inicial: ")
+      console.log(state)
       console.log("paso 2 reducir")
       let carroRecuperado = carritoPerfilUsuario();
       console.log(action.payload)
@@ -79,6 +82,8 @@ const carritoSlice = createSlice({
       }
       guardarCarritoLS(carroRecuperado);
       carritoPago(carroRecuperado);
+      console.log("estado final: ")
+      console.log(state)
       return carroRecuperado
     },
     aumentarCantidadRedux: (_state, action: PayloadAction<ItemCarrito>) => {

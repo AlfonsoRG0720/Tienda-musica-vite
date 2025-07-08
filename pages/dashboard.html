@@ -6,7 +6,7 @@
     <title>Dashboard usuario</title>
     <link rel="stylesheet" href="../src/styles/index-style.css">
     <link rel="stylesheet" href="../src/styles/dashboard-style.css">
-    <script defer type="module" src="/src/controllers/index-controller.ts"></script>
+    <script defer type="module" src="../src/controllers/index-controller.ts"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -15,24 +15,23 @@
     
 </head>
 <body>
-    <div id="Overlay"></div>
     <header>
         <h1 class="hidden">TIENDA CD DE MÚSICA</h1>
         <figure class="banner">
-            <img src="/assets/banner2.png" alt="Banner rock store-cd">
+            <img src="../public/assets/banner2.png" alt="Banner rock store-cd">
             <!--<figcaption>Banner rock store-cd</figcaption>-->
         </figure>
     </header>
     <main>
         <section  class="item-list">
             <ul>
-                <li><a href="/index.html">Ir a la tienda</a></li>
+                <li><a href="../index.html">Ir a la tienda</a></li>
             </ul>
         </section>
         <div  id="pag-dashboard" class="clase-pagina-dashboard">
             <div>
                 <h2 id="nombreUsuario"></h2>
-                <img src="/public/assets/perfiles/5.png" alt="imagen avatar usuario" class="avatar">
+                <img src="../public/assets/perfiles/5.png" alt="imagen avatar usuario" class="avatar">
                 <button id="BtnEditar">Editar información</button>
                 <button id="BtnEliminar">Eliminar cuenta</button>
             </div>
@@ -64,9 +63,9 @@
             <div class="logos">
                 <h3>Síguenos en RRSS:</h3>
                 <div>
-                  <a href="/index.html"><img src="/assets/logo-insta.png" alt="Logo instagram"></a>
-                  <a href="/index.html"><img src="/assets/logo-face.png" alt="logo facebook"></a>
-                  <a href="/index.html"><img src="/assets/logo-x.png" alt="logo x"></a>
+                  <a href="../index.html"><img src="../public/assets/logo-insta.png" alt="Logo instagram"></a>
+                  <a href="../index.html"><img src="../public/assets/logo-face.png" alt="logo facebook"></a>
+                  <a href="../index.html"><img src="../public/assets/logo-x.png" alt="logo x"></a>
                 </div>
             </div>
         </footer>

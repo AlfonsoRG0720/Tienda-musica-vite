@@ -41,7 +41,6 @@ export function carritoPerfilUsuario() {
         console.log(usuarioSesión)
 
         if (usuarioSesión==="") {
-          alert("entrando en el null")
           return carritoUsuarioRecuperado
         } else {
 

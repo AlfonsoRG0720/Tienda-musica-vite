@@ -6,6 +6,7 @@ function permisoAcceso() {
     const usuarioActual=recuperarUsuarioActual();
     const usuariosActuales=leerUsuarios();
     const revisarUsuario = usuariosActuales.find((u:any) => u.name === usuarioActual);
+
     if (!revisarUsuario) {
         const errorAcceso=document.getElementById("pag-dashboard")!;
         errorAcceso.innerHTML="No permitido acceder sin logearse con tu usuario";  
@@ -20,9 +21,11 @@ function permisoAcceso() {
 function identificarUsuario() {
     //Traer el usuario actual en sesión
     const usuarioActual=recuperarUsuarioActual();
+    console.log(usuarioActual)
     let usuarioTag=document.getElementById("nombreUsuario");
     
     if (!usuarioTag) {
+        alert("no usuario tag")
         return
     } else {
         usuarioTag.innerHTML=`Hola ${usuarioActual}`;
@@ -35,6 +38,7 @@ function escuchaEliminar() {
     const btnEliminar=document.getElementById("BtnEliminar");
     
     if (!btnEliminar) {
+        alert("no btn eliminar")
         return
     } else {
         btnEliminar.addEventListener("click",()=>{
@@ -89,9 +93,16 @@ function escuchaEditarUsuario() {
 }
 
 export function mainDashboard() {
-
+  if (document.readyState === 'loading') {
+    document.addEventListener("DOMContentLoaded", () => {
+      permisoAcceso();
+      escuchaEliminar();
+      escuchaEditarUsuario();
+    });
+  } else {
+    // El DOM ya está listo
     permisoAcceso();
     escuchaEliminar();
     escuchaEditarUsuario();
-
+  }
 }

@@ -637,7 +637,7 @@ export function carritoPago(carrito:any) {
               
               BtnDataId.addEventListener("click", function () {
                 
-                preguntarSiEliminar(carrito[i].nombre,carrito,carrito[i].id)
+                preguntarSiEliminar(carrito[i].nombre,carrito[i].id)
                 
               })
             }
@@ -653,7 +653,7 @@ export function carritoPago(carrito:any) {
                 
                 if (carrito[i].cantidad==1) {
                   
-                  preguntarSiEliminar(carrito[i].nombre,carrito,carrito[i].id)
+                  preguntarSiEliminar(carrito[i].nombre,carrito[i].id)
                   
                 } else {
                   //console.log("paso 1 reducir")
@@ -733,7 +733,7 @@ export function BtnTotalCarrito(cantCarritoUnidades:number | null) {
 }
 
 //=====================Pregunta si quiere eliminar del carrito======================
-function preguntarSiEliminar(nombreDisco:string,carrito:any,carritoId:number) {
+function preguntarSiEliminar(nombreDisco:string,carritoId:number) {
 
   if (confirm(`Deseas eliminar del carrito el disco: ${nombreDisco}?`)) {
     //console.log("paso 1 eliminar")
