@@ -1,7 +1,34 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
+import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+
+   plugins: [
+    VitePWA({
+      registerType: 'autoUpdate',
+      manifest: {
+        name: 'Tienda de discos retro',
+        short_name: 'Rock-Store',
+        start_url: '/',
+        display: 'standalone',
+        background_color: '#ffffff',
+        theme_color: '#8B8B8B',
+        icons: [
+          {
+            src: '/assets/logo_transparent-192.png',
+            sizes: '192x192',
+            type: 'image/png'
+          },
+          {
+            src: '/assets/logo_transparent-512.png',
+            sizes: '512x512',
+            type: 'image/png'
+          }
+        ]
+      }
+    })
+  ],
   // Carpeta raíz del proyecto
   root: '.',          
 
