@@ -233,6 +233,7 @@ export function pagarCarrito() {
     if (btnTerminarCompra) { 
       btnTerminarCompra.addEventListener("click",()=>{
         confirmaciónPagoCarrito.innerHTML=contenidoCarritoOriginal;
+        BtnTotalCarrito(null);
 
         const BtnVaciarCarrito=document.getElementById("BTN-vaciar-carrito");
     if (!BtnVaciarCarrito) {
