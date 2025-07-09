@@ -28,7 +28,7 @@ export function mainLogin (){
                 if (BBDDusuarios[i].rol==="administrador") {
                     window.location.href="gestionar.html";
                 } else if(BBDDusuarios[i].rol==="visitante"){
-                    window.location.href="index.html";
+                    window.location.href="/index.html";
                 } 
             }
         }
