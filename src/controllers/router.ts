@@ -7,10 +7,10 @@ import { mainDashboard } from "./../controllers/dashboard-controller.ts";
 
 const rutas = {
     "/index.html": iniciarPaginaHome,
-    "/pages/login.html": mainLogin,
-    "/pages/newUser.html": mainNewUser,
-    "/pages/gestionar.html": mainGestionar,
-    "/pages/dashboard.html": mainDashboard,
+    "/pages/login": mainLogin,
+    "/pages/newUser": mainNewUser,
+    "/pages/gestionar": mainGestionar,
+    "/pages/dashboard": mainDashboard,
 } as const;
 
 export function enrutador() {
