@@ -6,7 +6,6 @@ import { agregarAlCarrito, reducirCantidadRedux, aumentarCantidadRedux, eliminar
 import { recuperarBbddLS, almacenarBbddLS, guardarCarritoLS, recuperarCarritoLS } from "../utilities/functions-LocalStorage.ts";
 import { recuperarUsuarioActual, quitarCookieUsuario } from "../utilities/functions-cookies.ts";
 
-
 export function iniciarPaginaHome() {
 
   let estilo=true;  //Estilo de vista si cuadrícula o lista
