@@ -1,4 +1,5 @@
 import { agregarNuevoUsuario, leerUsuarios } from "./../models/BBDD.models";
+import { guardarUsuarioActual } from "../utilities/functions-cookies";
 
 export function mainNewUser() {
     const formNewUser=document.getElementById("FormNewUser");
@@ -30,9 +31,10 @@ export function mainNewUser() {
                     return
                 } else {
                     agregarNuevoUsuario(user, password, name);
+                    guardarUsuarioActual(name);
                 }
             }
-            window.location.href = "/src/pages/dashboard.html";
+            window.location.href = "/index.html";
         })
     }
 
