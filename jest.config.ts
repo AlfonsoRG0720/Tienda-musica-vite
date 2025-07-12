@@ -9,6 +9,7 @@ const config: JestConfigWithTsJest = {
   globals: {
     'ts-jest': {
       useESM: true,
+      tsconfig: './tsconfig.test.json'
     },
   },
   transform: {

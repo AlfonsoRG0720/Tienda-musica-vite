@@ -11,7 +11,7 @@
     "types": ["jest", "node", "vite-plugin-pwa/client"],
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "allowImportingTsExtensions": true,
     "moduleDetection": "force",
     "noEmit": true,
