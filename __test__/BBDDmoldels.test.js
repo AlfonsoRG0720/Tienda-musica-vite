@@ -1,9 +1,10 @@
-import { eliminar, listaDiscos } from "../src/models/BBDD.models";
+import { eliminar, leerDiscos, leerUsuarios } from "../src/models/BBDD.models";
 
 describe('Testear la eliminación',()=>{
 
     test('Deberá regresar un array con un elemento menos al original: 59->58',()=>{
-        let listaPrueba=eliminar(listaDiscos,1);
+        let listaDiscosTest=leerDiscos();
+        let listaPrueba=eliminar(listaDiscosTest,1);
         
         expect (listaPrueba.length).toBe(58)
     });
