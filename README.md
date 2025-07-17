@@ -11,19 +11,19 @@ La aplicación está preparada como una **PWA (Progressive Web App)** instalable
 🔗 [**Ver aplicación en vivo**](https://dicos-vite.netlify.app/index.html)
 
 ### 🧾 Página principal
-![Página principal](./assets/Captura%20de%20pantalla%204.jpg)
+![Página principal](/public/assets/Captura%20de%20pantalla%204.jpg)
 
 ### 🔐 Login de usuario
-![Login](./assets/Captura%20de%20pantalla%205.jpg)
+![Login](/public/assets/Captura%20de%20pantalla%205.jpg)
 
 ### 🎸 Gestión de discos (admin)
-![Gestión de discos](./assets/Captura%20de%20pantalla%206.jpg)
+![Gestión de discos](/public/assets/Captura%20de%20pantalla%206.jpg)
 
 ### 🧑‍💼 Edición de perfil
-![Editar perfil](./assets/Captura%20de%20pantalla%207.jpg)
+![Editar perfil](/public/assets/Captura%20de%20pantalla%207.jpg)
 
 ### 🛍️ Modal del carrito de compras
-![Carrito de compras](./assets/Captura%20de%20pantalla%208.jpg)
+![Carrito de compras](/public/assets/Captura%20de%20pantalla%208.jpg)
 
 ---
 
